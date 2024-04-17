@@ -9,7 +9,7 @@
         
         public ITrackable Parse(string line)
         {
-            logger.LogInfo("Begin parsing");
+            //logger.LogInfo("Begin parsing"); commented out to remove the console writeline 237 times.
 
             //the Split method returns ;substrings of an array.
             var cells = line.Split(',');

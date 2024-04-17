@@ -29,7 +29,7 @@ namespace LoggingKata
             var parser = new TacoParser(); //a new instance of your TacoParser class
 
             // Use the Select LINQ method to parse every line in lines collection
-            var locations = lines.Select(parser.Parse).ToArray();// we are transforming each element of the lines array to an new array stored in parser and sending it to the Parse method?
+            var locations = lines.Select(parser.Parse).ToArray();// we are transforming each element(line) of lines array to an new array stored in parser and sending it to the Parse method
 
 
             
@@ -80,7 +80,7 @@ namespace LoggingKata
             double miles2 = ConvertDistance.ConvertMetersToMiles(meters); //cahnged meters to miles with convert distance class.
             
             // I logged the two TacoBell and added the actual distance in miles.
-            logger.LogInfo($"{tacoBell1.Name} and {tacoBell2.Name} are the TacoBells' that are the farthest apart. The distance is: {Math.Round(miles2, 2)}");
+            logger.LogInfo($"{tacoBell1.Name} and {tacoBell2.Name} are the TacoBells' that are the farthest apart. The distance is: {Math.Round(miles2, 2)} miles!");
 
         }
     }
