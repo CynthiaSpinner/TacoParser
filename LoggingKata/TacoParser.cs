@@ -48,12 +48,12 @@
                 Latitude = latitude,
             };
             
-            //made instance of my tacobell class, needed to use dot.notation and pass parameters.
+            //made instance of my tacobell struct, more readable to use dot.notation to set properties because location has 2 properties inside it.
             var tacoBell = new TacoBell(name, location);
 
-
-                tacoBell.Location = location; // had to set value to "point" because I had made a new instance called point.
-                tacoBell.Name = name;
+            //created my object by giving values
+                tacoBell.Location = location; // had to set value to "location" .
+                tacoBell.Name = name; // set value
             
           
             //returned tacobell because it conforms to ITrackable.
