@@ -1,17 +1,15 @@
-# Taco Parser Kata
-
-An exercise in geolocation, csv parsing, and logging
-
-## Kata Overview
+# Taco Parser 
 
 
-## Kata Details
+
+
+## Details
 
 
 
 ### TacoParser
 
-Updating the `Parse` method in your `TacoParser`
+
 
 This method is used to parse a single row from your CSV file as a string and return an ITrackable:
 
