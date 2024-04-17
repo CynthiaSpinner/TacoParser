@@ -75,11 +75,12 @@ namespace LoggingKata
                     }
                 }
             }
+
+            double meters = distance;
+            double miles2 = ConvertDistance.ConvertMetersToMiles(meters); //cahnged meters to miles with convert distance class.
             
-            
-            
-            // I logged the two TacoBell and added the actual distance.
-            logger.LogInfo($"{tacoBell1.Name} and {tacoBell2.Name} are the TacoBells' that the farthest apart. The distance is: ({distance})");
+            // I logged the two TacoBell and added the actual distance in miles.
+            logger.LogInfo($"{tacoBell1.Name} and {tacoBell2.Name} are the TacoBells' that are the farthest apart. The distance is: {Math.Round(miles2, 2)}");
 
         }
     }

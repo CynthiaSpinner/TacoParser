@@ -55,5 +55,19 @@ namespace LoggingKata.Test
             Assert.Equal(expected, actual.Location.Latitude);
         }
 
+        [Theory]
+        [InlineData(900, 0.5592340730136005)]
+        [InlineData(567, 0.35231746599856834)]
+
+        public void CovertDistanceTest(double distance,  double expected)
+        {
+            //static
+
+            //Act
+            var actual = ConvertDistance.ConvertMetersToMiles(distance);
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
     }
 }
