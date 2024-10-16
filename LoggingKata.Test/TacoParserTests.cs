@@ -22,6 +22,7 @@ namespace LoggingKata.Test
         [Theory]
         [InlineData("34.073638, -84.677017, Taco Bell Acwort...", -84.677017)]
         [InlineData("33.470013,-86.816966,Taco Bell Birmingham...", -86.816966)]
+        [InlineData("34.996237,-85.291147,Taco Bell Chattanooga...", -85.291147)]
         
         public void ShouldParseLongitude(string line, double expected)
         {
@@ -33,7 +34,7 @@ namespace LoggingKata.Test
                                                 // the perameters of the parse method.
             //Assert
             Assert.Equal(expected, actual.Location.Longitude);// because the parse method is returning tacoBell,
-                                                              // we want to specified what part of the return we are comparing to our expected.
+                                                              // we want to specify which part of the return we are comparing to our expected.
             
         }
 
@@ -42,6 +43,7 @@ namespace LoggingKata.Test
         [Theory]
         [InlineData("33.671982,-85.826674,Taco Bell Annisto...", 33.671982)]
         [InlineData("32.555148,-84.946447,Taco Bell Columbus/1...", 32.555148)]
+        [InlineData("34.996237,-85.291147,Taco Bell Chattanooga...", 34.996237)]
 
         public void ShouldParseLatitude(string line, double expected) 
         {
@@ -52,7 +54,7 @@ namespace LoggingKata.Test
             var actual = tacoParser.Parse(line);
 
             //Assert
-            Assert.Equal(expected, actual.Location.Latitude);
+            Assert.Equal(expected, actual.Location.Latitude); //smae as above
         }
 
         [Theory]
@@ -64,7 +66,7 @@ namespace LoggingKata.Test
             //static
 
             //Act
-            var actual = ConvertDistance.ConvertMetersToMiles(distance);
+            var actual = ConvertDistance.ConvertMetersToMiles(distance); // testing the meters to miles method.
 
             //Assert
             Assert.Equal(expected, actual);

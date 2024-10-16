@@ -2,28 +2,26 @@ using System;
 using System.Linq;
 using System.IO;
 using GeoCoordinatePortable;
+using Serilog;
 
 namespace LoggingKata
 {
     class Program
     {
-        static readonly ILog logger = new TacoLogger();
+        // Objective: Find the two Taco Bells that are the farthest apart from one another.
+
         const string csvPath = "TacoBell-US-AL.csv"; // a constant for the csv file named csvPath
 
         static void Main(string[] args)
         {
-            // Objective: Find the two Taco Bells that are the farthest apart from one another.
-            // Some of the TODO's are done for you to get you started. 
+            Startup.InitializeLogger(); //logging initialized with Serilog for TDD purposes.
 
-            logger.LogInfo("Log initialized");
-
-            // Use File.ReadAllLines(path) to grab all the lines from your csv file. 
-            // Optional: Log an error if you get 0 lines and a warning if you get 1 line
+            Log.Information("Application Started");
 
             var lines = File.ReadAllLines(csvPath); //creating a variable called lines and storing the csvPath as a string array.
 
             // This will display the first item in your lines array
-            logger.LogInfo($"Lines: {lines[0]}");
+            Log.Information($"Lines: {lines[0]}");
 
             
             var parser = new TacoParser(); //a new instance of your TacoParser class
@@ -77,10 +75,13 @@ namespace LoggingKata
             }
 
             double meters = distance;
-            double miles2 = ConvertDistance.ConvertMetersToMiles(meters); //cahnged meters to miles with convert distance class.
-            
+            Log.Information($"Meters: {meters}");
+
+            double miles2 = ConvertDistance.ConvertMetersToMiles(meters); //Changed meters to miles with convert distance class.
+            Log.Information($"Meters converted to miles:{miles2}");
+
             // I logged the two TacoBell and added the actual distance in miles.
-            logger.LogInfo($"{tacoBell1.Name} and {tacoBell2.Name} are the TacoBells' that are the farthest apart. The distance is: {Math.Round(miles2, 2)} miles!");
+            Log.Information($"{tacoBell1.Name} and {tacoBell2.Name} are the TacoBells' that are the farthest apart. The distance is: {Math.Round(miles2, 2)} miles!");
 
         }
     }
