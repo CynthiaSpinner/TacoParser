@@ -3,6 +3,7 @@ using System.Linq;
 using System.IO;
 //using GeoCoordinatePortable; //OLD: using GeoCoordinate library for 2D distance calculations
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LoggingKata
 {
@@ -22,6 +23,21 @@ namespace LoggingKata
 
             logger.LogInformation("Application Started");
 
+            //NEW: setting up my dependency injection container
+            //this configures DI so ILogger gets injected into my services automatically
+            var services = new ServiceCollection();
+            
+            //registering logging with Serilog as the provider
+            services.AddLogging(builder => builder.AddSerilog(Serilog.Log.Logger));
+            
+            //registering DistanceCalculatorService - ILogger will be automatically injected into it
+            services.AddTransient<DistanceCalculatorService>();
+            
+            //building the service provider (DI container)
+            var serviceProvider = services.BuildServiceProvider();
+            
+            logger.LogInformation("Dependency Injection container configured");
+
             var lines = File.ReadAllLines(csvPath); //creating a variable called lines and storing the csvPath as a string array.
 
             //this will display the first item in my lines array
@@ -35,87 +51,12 @@ namespace LoggingKata
 
             logger.LogInformation($"Parsed {locations.Length} locations from CSV file");
 
+            //NEW: using dependency injection to get my DistanceCalculatorService
+            //ILogger gets automatically injected into the service constructor
+            var distanceCalculator = serviceProvider.GetRequiredService<DistanceCalculatorService>();
             
-         
-          
-            // storing my tacobells'.
-            ITrackable tacoBell1 = null;
-            ITrackable tacoBell2 = null;
-
-            //store// the distance.
-            double distance = 0;
-            
-            //OLD: detailed debug logging (commented out for less verbose output)
-            //logger.LogDebug("Starting distance calculations using 3D vector space (great circle distance)");
-            logger.LogInformation("Starting distance calculations using 3D vector space (great circle distance)");
-            
-
-            // NESTED LOOPS SECTION----------------------------
-
-            // FIRST FOR LOOP - using 3D vector space for distance calculations
-            //creating a loop to go through each item in my collection of locations.
-            for (int i = 0; i < locations.Length; i++)// cycles through object's (tacobells) location(latitude and longitude)
-            {
-                var locA = locations[i];//created variable to store each location updating as the loop cycles
-                
-                //NEW: converting latitude and longitude to 3D vector coordinates
-                var vecA = Vector3D.FromLatLong(locA.Location.Latitude, locA.Location.Longitude);
-                //this converts the spherical coordinates (lat, long) to 3D Cartesian coordinates (x, y, z) on Earth's surface
-                //OLD: detailed trace logging (commented out for less verbose output)
-                //logger.LogTrace($"Converted {locA.Name} (Lat: {locA.Location.Latitude}, Long: {locA.Location.Longitude}) to 3D vector coordinates");
-
-                //OLD CODE - using GeoCoordinate for 2D distance:
-                //var corA = new GeoCoordinate(); //Geolocation library to enable location comparisons: using GeoCoordinatePortable; this library has methods for calculating distances between coordinates.
-                //corA.Latitude = locA.Location.Latitude;
-                //created object of GeoCoordinate, with the location A's latitude/peramitor/property
-                //corA.Longitude = locA.Location.Longitude;
-                //created object of GeoCoordinate, with location A's longitude/peramitor/property
-
-                for (int j = 0; j < locations.Length; j++) 
-                {
-                    var locB = locations[j];
-                    
-                    //NEW: converting second location to 3D vector coordinates
-                    var vecB = Vector3D.FromLatLong(locB.Location.Latitude, locB.Location.Longitude);
-                    
-                    //NEW: calculating great circle distance (arc distance along Earth's surface following curvature)
-                    double currentDistance = vecA.DistanceTo(vecB);
-                    //OLD: detailed trace logging (commented out for less verbose output)
-                    //logger.LogTrace($"Calculated distance between {locA.Name} and {locB.Name}: {currentDistance:F2} meters");
-                    
-                    //OLD CODE - using GeoCoordinate for 2D distance:
-                    //var corB = new GeoCoordinate(locB.Location.Latitude, locB.Location.Longitude);
-                    //GeoCoordinate(double, double) is a class, having 2 properties of Latitude and longitude.
-                    //It represents a geographical location that is determined by latitude and longitude.
-                    //Note: GeoCoordinate(double, double, double, double, double, double, double)
-                    // (latitude, longitude, altitude, horizontal accuracy, vertical accuracy, speed, course) 
-                    // collects information like a gyroscope in f-18's
-
-                    //NEW: comparing great circle distance
-                    if (currentDistance > distance)// if great circle distance is greater than current max distance
-                    {
-                        double oldDistance = distance;
-                        distance = currentDistance; //updating the distance with great circle distance
-                        tacoBell1 = locA; tacoBell2 = locB; // updating tacobell1 and 2
-                        //OLD: detailed debug logging (commented out for less verbose output)
-                        //logger.LogDebug($"New maximum distance found: {locA.Name} to {locB.Name} = {currentDistance:F2} meters (previous max: {oldDistance:F2} meters)");
-                        logger.LogInformation($"New maximum distance found: {locA.Name} to {locB.Name} = {currentDistance:F2} meters (previous max: {oldDistance:F2} meters)");
-                    }
-                    
-                    //OLD CODE - using GeoCoordinate GetDistanceTo method:
-                    //if (corA.GetDistanceTo(corB) > distance)// if coordinate A, and Coordinate B is greater then distance
-                    //    // a method under the Geocoordinate class to measure the distance between 2 objects.
-                    //{
-                    //    distance = corA.GetDistanceTo(corB); //updating the distance
-                    //    tacoBell1 = locA; tacoBell2 = locB; // updating tacobell1 and 2
-                    //}
-                }
-            }
-
-            //distance is already in meters from great circle distance calculation
-            double meters = distance;
-            logger.LogInformation($"Completed distance calculations. Total comparisons: {locations.Length * locations.Length}");
-            logger.LogInformation($"Maximum distance found: {meters:F2} meters (great circle distance)");
+            //calling the service method - all logging happens inside the service using the injected ILogger
+            var (tacoBell1, tacoBell2, meters) = distanceCalculator.FindFarthestLocations(locations);
 
             double miles2 = ConvertDistance.ConvertMetersToMiles(meters); //Changed meters to miles with convert distance class.
             logger.LogInformation($"Meters converted to miles:{miles2}");
