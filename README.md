@@ -1,88 +1,83 @@
-# Taco Parser Kata
+# Taco Parser
 
-An exercise in geolocation, csv parsing, and logging
+A C# application that finds the two Taco Bell locations that are farthest apart from each other using geolocation calculations, CSV parsing, and structured logging.
 
-## Kata Overview
+## Overview
 
-Here's what you'll need to do for this Kata:
+This project parses a CSV file containing Taco Bell locations (latitude, longitude, and name) and calculates the distance between all location pairs to determine which two locations are the farthest apart. The application uses 3D vector space mathematics for distance calculations and implements structured logging with ILogger and Serilog.
 
-1. Clone this repo to your machine
-2. Complete all the `TODO`s, while adding appropriate log statements along the way. You can find more details below in the Kata Details section:
-    1. Start with writing a Unit Test to Test the Parse method
-    2. Implement the Parse Method
-    3. Use the [GeoCoordinate.NetCore](https://www.nuget.org/packages/GeoCoordinate.NetCore/) NuGet package to calculate distance between two points
-3. Reduce the logging verbosity and rerun
+## Features
 
-## Kata Details
+### 3D Vector Space Distance Calculations
+- **Vector3D Class**: Custom implementation for 3D coordinate calculations
+- Converts latitude/longitude to 3D Cartesian coordinates (x, y, z) on Earth's surface
+- Calculates straight-line distance through 3D space using Euclidean distance formula
+- Replaces the original GeoCoordinate.NetCore package approach with 3D vector mathematics
 
-Here's some more details for completing the steps above.
+### ILogger Integration with Serilog
+- **ILogger Interface**: Uses Microsoft.Extensions.Logging.ILogger<T> for standard .NET logging
+- **Serilog Provider**: Serilog configured as the logging provider, implementing ILogger
+- **Benefits**: 
+  - Standard .NET logging pattern (dependency injection friendly)
+  - Serilog's powerful features (file logging, structured logging, console output)
+  - Better testability (can mock ILogger in unit tests)
+  - Flexible (can swap logging providers without changing code)
 
-### TacoParser
+## Packages Used
+- `Serilog` - Structured logging framework
+- `Serilog.Sinks.Console` - Console output
+- `Serilog.Sinks.File` - File logging with rolling intervals
+- `Serilog.Extensions.Logging` - Integration with Microsoft.Extensions.Logging
+- `Microsoft.Extensions.Logging` - Standard .NET logging interface
+- `GeoCoordinate.NetCore` - (Original implementation, now commented out for reference)
 
-Updating the `Parse` method in your `TacoParser`
+## Technical Details
 
-This method is used to parse a single row from your CSV file as a string and return an ITrackable:
+### 3D Vector Space Implementation
 
-```csharp
-public ITrackable Parse(string line)
-{
-    // Take your line and use line.Split(',') to split it up into an array of strings, separated by the char ','
-    var cells = line.Split(',');
-
-    // If your array.Length is less than 3, something went wrong
-    if (cells.Length < 3)
-    {
-        // Log that and return null
-    }
-
-    // grab the latitude from your array at index 0
-    // grab the longitude from your array at index 1
-    // grab the name from your array at index 2
-
-    // Your going to need to parse your string as a `double`
-    // which is similar to parsing a string as an `int`
-
-    // You'll need to create a TacoBell class
-    // that conforms to ITrackable
-
-    // Then, you'll need an instance of the TacoBell class
-    // With the name and point set correctly
-
-    // Then, return the instance of your TacoBell class
-    // Since it conforms to ITrackable
-}
-```
-
-### Program
-
-You now have your `Parse` method working properly. Now, let's get into our Program file in our `Main` static method.
+The `Vector3D` class converts spherical coordinates (latitude, longitude) to 3D Cartesian coordinates:
 
 ```csharp
-static void Main(string[] args)
-{
-    // DON'T FORGET TO LOG YOUR STEPS
-    // Grab the path from the name of your file
-
-    // use File.ReadAllLines(path) to grab all the lines from your csv file
-    // Log and error if you get 0 lines and a warning if you get 1 line
-
-    // Create a new instance of your TacoParser class
-    // Grab an IEnumerable of locations using the Select command: var locations = lines.Select(parser.Parse);
-
-    // Now, here's the new code
-
-    // Create two `ITrackable` variables with initial values of `null`. These will be used to store your two taco bells that are the furthest from each other.
-    // Create a `double` variable to store the distance
-
-    // Include the Geolocation toolbox, so you can compare locations: `using GeoCoordinatePortable;`
-    // Do a loop for your locations to grab each location as the origin (perhaps: `locA`)
-    // Create a new corA Coordinate with your locA's lat and long
-
-    // Now, do another loop on the locations with the scope of your first loop, so you can grab the "destination" location (perhaps: `locB`)
-    // Create a new Coordinate with your locB's lat and long
-    // Now, compare the two using `.GetDistanceTo()`, which returns a double
-    // If the distance is greater than the currently saved distance, update the distance and the two `ITrackable` variables you set above
-
-    // Once you've looped through everything, you've found the two Taco Bells furthest away from each other.
-}
+// Conversion formula (Earth's radius = 6,371,000 meters)
+x = R * cos(lat) * cos(long)
+y = R * cos(lat) * sin(long)
+z = R * sin(lat)
 ```
+
+Distance is calculated using the Euclidean distance formula:
+```csharp
+distance = √((x₂-x₁)² + (y₂-y₁)² + (z₂-z₁)²)
+```
+
+**Note**: The 3D vector distance is the straight-line distance through 3D space, which differs from surface distance (great circle distance) calculated by GeoCoordinate. The 3D approach goes "through" the Earth, while surface distance follows the Earth's curved surface.
+
+### Logging Setup
+
+The `Startup.InitializeLogger()` method:
+1. Configures Serilog with console and file sinks
+2. Creates an ILoggerFactory with Serilog as the provider
+3. Returns the factory for creating ILogger<T> instances
+
+Example usage:
+```csharp
+var loggerFactory = Startup.InitializeLogger();
+var logger = loggerFactory.CreateLogger<Program>();
+logger.LogInformation("Application Started");
+```
+
+All logging goes through the ILogger interface but is powered by Serilog underneath, providing both standard .NET patterns and Serilog's advanced features.
+
+## How It Works
+
+1. **CSV Parsing**: Reads Taco Bell location data from a CSV file
+2. **Location Conversion**: Converts each location's latitude/longitude to 3D Cartesian coordinates
+3. **Distance Calculation**: Compares all location pairs using 3D vector distance calculations
+4. **Result**: Identifies and displays the two locations that are farthest apart, along with the distance in miles
+
+## Project Structure
+
+- `LoggingKata/Program.cs` - Main application entry point
+- `LoggingKata/TacoParser.cs` - CSV parsing logic
+- `LoggingKata/Vector3D.cs` - 3D vector space calculations
+- `LoggingKata/Startup.cs` - Logger configuration
+- `LoggingKata/ConvertDistance.cs` - Distance unit conversion utilities
