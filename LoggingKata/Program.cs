@@ -33,6 +33,7 @@ namespace LoggingKata
             //using the Select LINQ method to parse every line in my lines collection
             var locations = lines.Select(parser.Parse).ToArray();// we are transforming each element(line) of lines array to an new array stored in parser and sending it to the Parse method
 
+            logger.LogInformation($"Parsed {locations.Length} locations from CSV file");
 
             
          
@@ -43,6 +44,10 @@ namespace LoggingKata
 
             //store// the distance.
             double distance = 0;
+            
+            //OLD: detailed debug logging (commented out for less verbose output)
+            //logger.LogDebug("Starting distance calculations using 3D vector space (great circle distance)");
+            logger.LogInformation("Starting distance calculations using 3D vector space (great circle distance)");
             
 
             // NESTED LOOPS SECTION----------------------------
@@ -56,6 +61,8 @@ namespace LoggingKata
                 //NEW: converting latitude and longitude to 3D vector coordinates
                 var vecA = Vector3D.FromLatLong(locA.Location.Latitude, locA.Location.Longitude);
                 //this converts the spherical coordinates (lat, long) to 3D Cartesian coordinates (x, y, z) on Earth's surface
+                //OLD: detailed trace logging (commented out for less verbose output)
+                //logger.LogTrace($"Converted {locA.Name} (Lat: {locA.Location.Latitude}, Long: {locA.Location.Longitude}) to 3D vector coordinates");
 
                 //OLD CODE - using GeoCoordinate for 2D distance:
                 //var corA = new GeoCoordinate(); //Geolocation library to enable location comparisons: using GeoCoordinatePortable; this library has methods for calculating distances between coordinates.
@@ -71,8 +78,10 @@ namespace LoggingKata
                     //NEW: converting second location to 3D vector coordinates
                     var vecB = Vector3D.FromLatLong(locB.Location.Latitude, locB.Location.Longitude);
                     
-                    //NEW: calculating 3D vector distance (straight-line distance through 3D space)
+                    //NEW: calculating great circle distance (arc distance along Earth's surface following curvature)
                     double currentDistance = vecA.DistanceTo(vecB);
+                    //OLD: detailed trace logging (commented out for less verbose output)
+                    //logger.LogTrace($"Calculated distance between {locA.Name} and {locB.Name}: {currentDistance:F2} meters");
                     
                     //OLD CODE - using GeoCoordinate for 2D distance:
                     //var corB = new GeoCoordinate(locB.Location.Latitude, locB.Location.Longitude);
@@ -82,11 +91,15 @@ namespace LoggingKata
                     // (latitude, longitude, altitude, horizontal accuracy, vertical accuracy, speed, course) 
                     // collects information like a gyroscope in f-18's
 
-                    //NEW: comparing 3D vector distance
-                    if (currentDistance > distance)// if 3D vector distance is greater than current max distance
+                    //NEW: comparing great circle distance
+                    if (currentDistance > distance)// if great circle distance is greater than current max distance
                     {
-                        distance = currentDistance; //updating the distance with 3D vector distance
+                        double oldDistance = distance;
+                        distance = currentDistance; //updating the distance with great circle distance
                         tacoBell1 = locA; tacoBell2 = locB; // updating tacobell1 and 2
+                        //OLD: detailed debug logging (commented out for less verbose output)
+                        //logger.LogDebug($"New maximum distance found: {locA.Name} to {locB.Name} = {currentDistance:F2} meters (previous max: {oldDistance:F2} meters)");
+                        logger.LogInformation($"New maximum distance found: {locA.Name} to {locB.Name} = {currentDistance:F2} meters (previous max: {oldDistance:F2} meters)");
                     }
                     
                     //OLD CODE - using GeoCoordinate GetDistanceTo method:
@@ -99,9 +112,10 @@ namespace LoggingKata
                 }
             }
 
-            //distance is already in meters from 3D vector calculation
+            //distance is already in meters from great circle distance calculation
             double meters = distance;
-            logger.LogInformation($"Meters (3D vector distance): {meters}");
+            logger.LogInformation($"Completed distance calculations. Total comparisons: {locations.Length * locations.Length}");
+            logger.LogInformation($"Maximum distance found: {meters:F2} meters (great circle distance)");
 
             double miles2 = ConvertDistance.ConvertMetersToMiles(meters); //Changed meters to miles with convert distance class.
             logger.LogInformation($"Meters converted to miles:{miles2}");

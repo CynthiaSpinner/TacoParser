@@ -14,8 +14,10 @@ namespace LoggingKata
         public static ILoggerFactory InitializeLogger() 
         {
             //created logger configuration with Serilog to log information to my log file and to the console, set to create a new log file per day with a time stamp.
+            //using Information level for less verbose output (production-ready)
+            //OLD: .MinimumLevel.Debug() //uncomment this and comment Information to see detailed Debug/Trace logs
             var loggerConfiguration = new LoggerConfiguration()
-                .MinimumLevel.Information()
+                .MinimumLevel.Information() //set to Information for less verbose output, change to Debug for detailed logging
                 .WriteTo.Console()
                 .WriteTo.File(path: "logs/LogInfo_TacoParser-.txt", rollingInterval: RollingInterval.Day);
 

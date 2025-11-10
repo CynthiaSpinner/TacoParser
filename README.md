@@ -11,8 +11,9 @@ This project parses a CSV file containing Taco Bell locations (latitude, longitu
 ### 3D Vector Space Distance Calculations
 - **Vector3D Class**: Custom implementation for 3D coordinate calculations
 - Converts latitude/longitude to 3D Cartesian coordinates (x, y, z) on Earth's surface
-- Calculates straight-line distance through 3D space using Euclidean distance formula
-- Replaces the original GeoCoordinate.NetCore package approach with 3D vector mathematics
+- Calculates great circle distance (arc distance along Earth's surface) using vector dot product and angle calculations
+- Educational implementation that demonstrates the mathematics behind geolocation distance calculations
+- Note: GeoCoordinate.NetCore provides the same functionality with less code, but this implementation shows the underlying math
 
 ### ILogger Integration with Serilog
 - **ILogger Interface**: Uses Microsoft.Extensions.Logging.ILogger<T> for standard .NET logging
@@ -44,12 +45,37 @@ y = R * cos(lat) * sin(long)
 z = R * sin(lat)
 ```
 
-Distance is calculated using the Euclidean distance formula:
+Distance is calculated using great circle distance (arc distance along Earth's surface):
+
 ```csharp
-distance = √((x₂-x₁)² + (y₂-y₁)² + (z₂-z₁)²)
+// Calculate dot product of the two vectors
+dotProduct = vec1 · vec2
+
+// Calculate angle between vectors
+cos(angle) = dotProduct / (R × R)
+angle = arccos(cos(angle))
+
+// Great circle distance = angle × Earth's radius
+distance = angle × R
 ```
 
-**Note**: The 3D vector distance is the straight-line distance through 3D space, which differs from surface distance (great circle distance) calculated by GeoCoordinate. The 3D approach goes "through" the Earth, while surface distance follows the Earth's curved surface.
+**Distance Calculation**: 
+
+The current implementation calculates **great circle distance** (arc distance along Earth's curved surface), which follows the Earth's topography/curvature. This is the same type of distance that GeoCoordinate's `GetDistanceTo()` method calculates.
+
+- **Great Circle Distance (Current 3D Vector)**: Arc distance along Earth's surface following curvature
+- **Great Circle Distance (GeoCoordinate)**: Same calculation, but using built-in library methods
+
+**Why use 3D vectors instead of GeoCoordinate?**
+- **Educational value**: Demonstrates the underlying mathematics (dot product, angle calculation, spherical geometry)
+- **Understanding**: Shows how 3D coordinates can be used for geolocation calculations
+- **Customization**: Easier to modify or extend for specific needs
+- **No dependency**: One less NuGet package (though GeoCoordinate is lightweight)
+
+**When to use GeoCoordinate instead:**
+- Simpler code with less maintenance
+- Well-tested library with edge cases handled
+- Production applications where simplicity > educational value
 
 ### Logging Setup
 
@@ -71,7 +97,7 @@ All logging goes through the ILogger interface but is powered by Serilog underne
 
 1. **CSV Parsing**: Reads Taco Bell location data from a CSV file
 2. **Location Conversion**: Converts each location's latitude/longitude to 3D Cartesian coordinates
-3. **Distance Calculation**: Compares all location pairs using 3D vector distance calculations
+3. **Distance Calculation**: Compares all location pairs using great circle distance calculations (arc distance along Earth's surface)
 4. **Result**: Identifies and displays the two locations that are farthest apart, along with the distance in miles
 
 ## Project Structure
