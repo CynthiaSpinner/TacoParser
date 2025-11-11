@@ -1,7 +1,7 @@
 ﻿namespace LoggingKata
 {
     /// <summary>
-    /// Parses a POI file to locate all the Taco Bells
+    /// Parses a csv file to locate all the Taco Bells
     /// </summary>
     public class TacoParser
     {

@@ -4,6 +4,8 @@ using System.IO;
 //using GeoCoordinatePortable; //OLD: using GeoCoordinate library for 2D distance calculations
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Extensions.Logging;
 
 namespace LoggingKata
 {

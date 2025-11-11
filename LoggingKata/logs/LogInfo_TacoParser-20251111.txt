@@ -1,0 +1,30 @@
+2025-11-11 16:46:02.535 -06:00 [INF] Application Started
+2025-11-11 16:46:02.576 -06:00 [INF] Dependency Injection container configured
+2025-11-11 16:46:02.588 -06:00 [INF] Lines: 34.073638,-84.677017,Taco Bell Acwort...
+2025-11-11 16:46:02.595 -06:00 [INF] Parsed 237 locations from CSV file
+2025-11-11 16:46:02.597 -06:00 [INF] Starting distance calculations using 3D vector space (great circle distance)
+2025-11-11 16:46:02.603 -06:00 [INF] New maximum distance found: Taco Bell Acwort... to Taco Bell Acworth... = 4226.67 meters (previous max: 0.00 meters)
+2025-11-11 16:46:02.604 -06:00 [INF] New maximum distance found: Taco Bell Acwort... to Taco Bell Acworth... = 9474.70 meters (previous max: 4226.67 meters)
+2025-11-11 16:46:02.605 -06:00 [INF] New maximum distance found: Taco Bell Acwort... to Taco Bell Adairsvill... = 40059.93 meters (previous max: 9474.70 meters)
+2025-11-11 16:46:02.605 -06:00 [INF] New maximum distance found: Taco Bell Acwort... to Taco Bell Alabaste... = 218183.59 meters (previous max: 40059.93 meters)
+2025-11-11 16:46:02.605 -06:00 [INF] New maximum distance found: Taco Bell Acwort... to Taco Bell Albany... = 283416.64 meters (previous max: 218183.59 meters)
+2025-11-11 16:46:02.606 -06:00 [INF] New maximum distance found: Taco Bell Acwort... to Taco Bell Bainbridg... = 352660.96 meters (previous max: 283416.64 meters)
+2025-11-11 16:46:02.606 -06:00 [INF] New maximum distance found: Taco Bell Acwort... to Taco Bell Bay Minett... = 457638.12 meters (previous max: 352660.96 meters)
+2025-11-11 16:46:02.607 -06:00 [INF] New maximum distance found: Taco Bell Acwort... to Taco Bell Daphn... = 486657.90 meters (previous max: 457638.12 meters)
+2025-11-11 16:46:02.607 -06:00 [INF] New maximum distance found: Taco Bell Acwort... to Taco Bell Fole... = 497319.53 meters (previous max: 486657.90 meters)
+2025-11-11 16:46:02.607 -06:00 [INF] New maximum distance found: Taco Bell Acworth... to Taco Bell Fole... = 504046.91 meters (previous max: 497319.53 meters)
+2025-11-11 16:46:02.608 -06:00 [INF] New maximum distance found: Taco Bell Adairsvill... to Taco Bell Fole... = 513533.82 meters (previous max: 504046.91 meters)
+2025-11-11 16:46:02.608 -06:00 [INF] New maximum distance found: Taco Bell Alpharett... to Taco Bell Fole... = 518308.87 meters (previous max: 513533.82 meters)
+2025-11-11 16:46:02.609 -06:00 [INF] New maximum distance found: Taco Bell Alpharetta... to Taco Bell Fole... = 520452.89 meters (previous max: 518308.87 meters)
+2025-11-11 16:46:02.609 -06:00 [INF] New maximum distance found: Taco Bell Ardmore... to Taco Bell Lynn Have... = 541337.28 meters (previous max: 520452.89 meters)
+2025-11-11 16:46:02.610 -06:00 [INF] New maximum distance found: Taco Bell Ardmore... to Taco Bell Panama Cit... = 550172.76 meters (previous max: 541337.28 meters)
+2025-11-11 16:46:02.610 -06:00 [INF] New maximum distance found: Taco Bell Ardmore... to Taco Bell Tallahasse... = 554538.31 meters (previous max: 550172.76 meters)
+2025-11-11 16:46:02.611 -06:00 [INF] New maximum distance found: Taco Bell Ardmore... to Taco Bell Tallahassee... = 555027.06 meters (previous max: 554538.31 meters)
+2025-11-11 16:46:02.611 -06:00 [INF] New maximum distance found: Taco Bell Ardmore... to Taco Bell Tallahassee... = 557986.49 meters (previous max: 555027.06 meters)
+2025-11-11 16:46:02.611 -06:00 [INF] New maximum distance found: Taco Bell Ardmore... to Taco Bell Tallahassee... = 563603.10 meters (previous max: 557986.49 meters)
+2025-11-11 16:46:02.612 -06:00 [INF] New maximum distance found: Taco Bell Blue Ridg... to Taco Bell Daphn... = 579180.41 meters (previous max: 563603.10 meters)
+2025-11-11 16:46:02.613 -06:00 [INF] New maximum distance found: Taco Bell Blue Ridg... to Taco Bell Fole... = 591438.86 meters (previous max: 579180.41 meters)
+2025-11-11 16:46:02.617 -06:00 [INF] Completed distance calculations. Total comparisons: 56169
+2025-11-11 16:46:02.618 -06:00 [INF] Maximum distance found: 591438.86 meters (great circle distance)
+2025-11-11 16:46:02.620 -06:00 [INF] Meters converted to miles:367.5030668111923
+2025-11-11 16:46:02.621 -06:00 [INF] Taco Bell Blue Ridg... and Taco Bell Fole... are the TacoBells' that are the farthest apart. The distance is: 367.5 miles!
