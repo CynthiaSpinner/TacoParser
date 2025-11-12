@@ -3,7 +3,7 @@
     /// <summary>
     /// Parses a csv file to locate all the Taco Bells
     /// </summary>
-    public class TacoParser
+    public class TacoParser : ILocationParser
     {
        
         

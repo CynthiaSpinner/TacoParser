@@ -20,7 +20,7 @@ namespace LoggingKata
         //Earth's radius in meters is approximately 6,371,000 meters
         public static Vector3D FromLatLong(double latitude, double longitude)
         {
-            const double earthRadiusMeters = 6371000.0; //Earth's radius in meters
+            const double earthRadiusMeters = Constants.EarthRadiusMeters; //Earth's radius in meters
             
             //convert degrees to radians
             double latRad = latitude * Math.PI / 180.0;
@@ -49,7 +49,7 @@ namespace LoggingKata
         //this follows the Earth's topography/curvature, similar to GeoCoordinate.GetDistanceTo()
         public double DistanceTo(Vector3D other)
         {
-            const double earthRadiusMeters = 6371000.0; //Earth's radius in meters
+            const double earthRadiusMeters = Constants.EarthRadiusMeters; //Earth's radius in meters
             
             //calculate dot product of the two vectors
             double dotProduct = X * other.X + Y * other.Y + Z * other.Z;

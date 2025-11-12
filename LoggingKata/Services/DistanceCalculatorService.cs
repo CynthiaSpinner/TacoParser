@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace LoggingKata
+namespace LoggingKata.Services
 {
     //service class that uses dependency injection for ILogger
     //ILogger gets injected automatically through the constructor
